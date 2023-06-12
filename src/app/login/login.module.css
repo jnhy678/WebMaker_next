@@ -1,0 +1,46 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  .loginBox {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f0f0f0;
+    text-align: center;
+  }
+
+  .title {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .input {
+    width: 300px;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .button {
+    padding: 10px 20px;
+    background-color: #0070f3;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .button:hover {
+    background-color: #0056b3;
+  }
+  
