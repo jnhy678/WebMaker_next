@@ -2,11 +2,10 @@
 import { useState, useEffect } from 'react';
 import { Container, Form, Button } from 'react-bootstrap';
 import styles from './login.module.css';
-import { useRouter } from 'next/navigation';
+import Router, { useRouter } from 'next/router';
 
 async function getData (id:any ,password:any, e: React.FormEvent<HTMLFormElement>) {
-  new Promise(async (resolve, reject) => {
-
+  const router = useRouter();
   console.log('id:', id);
   console.log('Password:', password);
   // 폼 데이터 수집
@@ -30,20 +29,17 @@ async function getData (id:any ,password:any, e: React.FormEvent<HTMLFormElement
   // const data = await respones.json();
   // console.log('data:', data);
 
-  await fetch('/api', formObject)
+  await fetch('/api/test', formObject)
     .then((response) => response.json())
     .then((data) => {
       console.log('data',data);
-      alert(data);
-      //   // 폼 제출 완료 후 처리할 로직 작성
-      
-      resolve(true);
+    //   // 폼 제출 완료 후 처리할 로직 작성
+    //   router.push('/main')
     })
     .catch((error) => {
       console.log('error',error)
       // 오류 처리 로직 작성
     });
-  });
 }
 
 const LoginPage = () => {
@@ -57,14 +53,12 @@ const LoginPage = () => {
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
+    router.push('/main')
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    getData(id, password, e)
-    .then((res) => {
-      router.push('/main')
-    });
+    getData(id, password, e);
     
   };
 
