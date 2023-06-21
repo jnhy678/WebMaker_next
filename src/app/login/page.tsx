@@ -9,14 +9,23 @@ async function getData (id:any ,password:any, e: React.FormEvent<HTMLFormElement
 
   console.log('id:', id);
   console.log('Password:', password);
-  const formData = new FormData(e.currentTarget);
-  const formObject = Object.fromEntries(formData.entries());
+  const formData = {
+    id : id,
+    password : password
+  };
+  // const formObject = Object.fromEntries(formData);
 
-  await fetch('/api', formObject)
+  await fetch('/api/login', {
+    method: 'POST',
+    headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer <token>'
+    },
+    body:JSON.stringify(formData)
+  })
     .then((response) => response.json())
     .then((data) => {
       console.log('data',data);
-      alert(data);
       
       resolve(true);
     })
