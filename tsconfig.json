@@ -14,6 +14,9 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
     "plugins": [
       {
         "name": "next"
@@ -21,11 +24,13 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/app/*"],
+      "@src/*": ["src/*"],
+      "@app/*": ["src/app/*"],
       "@components/*": ["src/app/components/*"],
       "@api/*": ["src/app/api/*"],
+      "@utils/*": ["src/utils/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/api/form/page.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/api/form/page.js", "src/utils/schemas/user.schema"],
   "exclude": ["node_modules"]
 }

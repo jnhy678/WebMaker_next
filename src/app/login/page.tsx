@@ -3,37 +3,34 @@ import { useState, useEffect, useRef } from 'react';
 import { Container, Form, Button, ButtonGroup, FormCheck } from 'react-bootstrap';
 import styles from './login.module.css';
 import { useRouter } from 'next/navigation';
+import axios from 'axios';
 
 async function getData (id:any ,password:any, e: React.FormEvent<HTMLFormElement>) {
   new Promise(async (resolve, reject) => {
+    const formData:any = {
+      id : id,
+      password : password
+    };
 
-  console.log('id:', id);
-  console.log('Password:', password);
-  const formData = {
-    id : id,
-    password : password
-  };
-  // const formObject = Object.fromEntries(formData);
-
-  await fetch('/api/login', {
-    method: 'POST',
-    headers: {
-    'Content-Type': 'application/json',
-    'Authorization': 'Bearer <token>'
-    },
-    body:JSON.stringify(formData)
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log('data',data);
-      
-      resolve(true);
+    await fetch('/api/user/login', {
+      method: 'GET',
+      headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer <token>' + process.env.token
+      },
+      // body:JSON.stringify(formData)
     })
-    .catch((error) => {
-      console.log('error',error)
-      // 오류 처리 로직 작성
+    // axios.get('/api/user/login', await formData)
+      .then(async (data) => {
+        console.log('data',data);
+        
+        resolve(await data);
+      })
+      .catch((error) => {
+        console.log('error',error)
+        // 오류 처리 로직 작성
+      });
     });
-  });
 }
 
 const LoginPage = () => {
@@ -70,8 +67,9 @@ const LoginPage = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     getData(id, password, e)
-    .then((res) => {
-      router.push('/main')
+    .then(async (res) => {
+      // alert(await res)
+      // router.push('/main')
     });
   };
 
@@ -95,7 +93,9 @@ const LoginPage = () => {
       }
     // }
   }, [])
-
+  function signup () {
+    router.push('/signup')
+  }
   return (
     <>
     <Container className={styles.container}>
@@ -134,7 +134,7 @@ const LoginPage = () => {
         </Form>
       </div>
       <ButtonGroup aria-label="Basic example" className={styles.subinfo}>
-        <Button variant="light">회원가입</Button>
+        <Button variant="light" onClick={signup}>회원가입</Button>
         <Button variant="light">Id/Pw찾기</Button>
       </ButtonGroup>
     </Container>
