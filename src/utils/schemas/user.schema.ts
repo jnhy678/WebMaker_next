@@ -33,7 +33,6 @@
 
 
 import mongoose from 'mongoose';
-import {getDB} from '../connectDB'
 const Schema = mongoose.Schema;
 
 mongoose.connect(process.env.MONGODB_LOCAL_URI!);

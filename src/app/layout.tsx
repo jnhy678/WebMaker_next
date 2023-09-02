@@ -1,5 +1,5 @@
 import './globals.css'
-import { connectDB } from '@utils/connectDB';
+import { connectToDatabase } from '@utils/connectDB';
 import { Inter } from 'next/font/google'
 import { useEffect } from 'react';
 import dotenv from 'dotenv-safe';
@@ -18,7 +18,7 @@ export default function RootLayout({Component,
   children: React.ReactNode,
   Component: React.Component,
 }) {
-    connectDB();
+  connectToDatabase();
 
   return (
     <html lang="ko">

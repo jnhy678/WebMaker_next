@@ -12,25 +12,25 @@ async function getData (id:any ,password:any, e: React.FormEvent<HTMLFormElement
       password : password
     };
 
-    await fetch('/api/user/login', {
-      method: 'GET',
+    const login = await fetch('/api/user/login', {
+      method: 'POST',
       headers: {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer <token>' + process.env.token
+      'Authorization': 'Bearer <token>' + process.env.token,
       },
-      // body:JSON.stringify(formData)
+      body:JSON.stringify(formData)
     })
-    // axios.get('/api/user/login', await formData)
-      .then(async (data) => {
-        console.log('data',data);
-        
-        resolve(await data);
-      })
-      .catch((error) => {
-        console.log('error',error)
-        // 오류 처리 로직 작성
-      });
+    .then(async (data) => {
+      const response = await data.json();
+      console.log('data',data);
+      
+      // resolve(await data);
+    })
+    .catch((error) => {
+      console.log('error',error)
+      // 오류 처리 로직 작성
     });
+});
 }
 
 const LoginPage = () => {

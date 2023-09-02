@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Debug Next.js",
+        "type": "node",
+        "request": "launch",
+        "cwd": "${workspaceFolder}",
+        "runtimeExecutable": "npm",
+        "runtimeArgs": ["run", "dev"], // "npm run dev" 명령어 실행
+        // "port": 3000, // Next.js 개발 서버가 사용하는 포트 번호
+        // "protocol": "http",
+        "stopOnEntry": false,
+        "sourceMaps": true,
+        "console": "integratedTerminal",
+        "internalConsoleOptions": "neverOpen"
+      }
+    ]
+  }

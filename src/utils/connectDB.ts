@@ -1,41 +1,43 @@
-import mongoose from 'mongoose';
+import mysql from 'mysql2/promise';
 
-const localUri = process.env.MONGODB_LOCAL_URI as string;
-const connection: any = {};
-let mongo: mongoose.Connection | null = null;
-export async function connectDB() {
-  if (connection.isConnected) {
-    console.log('DB 연결확인');
-  }
-
-  if (mongoose.connections.length > 0) {
-    connection.isConnected = mongoose.connections[0].readyState;
-    if (connection.isConnected === 1) {
-      console.log('use previous connection');
+let connection: any;
+const port = process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : undefined;
+// MariaDB 연결 설정 및 연결 수립
+export async function connectToDatabase() {
+  try {
+    if (connection) {
+      console.log('MariaDB 연결확인.');
+      return;
     }
-    await mongoose.disconnect();
-  }
 
-  const db = await mongoose.connect(localUri);
-  console.log('? MongoDB Database Connected Successfully');
-  connection.isConnected = db.connections[0].readyState;
-  mongo = db.connections[0];
+    connection = await mysql.createConnection({
+      host: process.env.DB_HOST,
+      port: port,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_DATABASE,
+    });
+    
+    console.log('MariaDB 연결 성공');
+  } catch (error) {
+    console.error('MariaDB 연결 실패:', error);
+    throw error;
+  }
 }
 
-export async function disconnectDB() {
-  if (connection.isConnected) {
-    if (process.env.NODE_ENV === 'production') {
-      await mongoose.disconnect();
-      connection.isConnected = false;
-    } else {
-      console.log('not discounted');
-    }
+// 예시: 사용자 데이터 조회
+export async function getUsers() {
+  try {
+    const [rows] = await connection.query('SELECT * FROM users');
+    return rows;
+  } catch (error) {
+    console.error('쿼리 실행 실패:', error);
+    throw error;
   }
 }
-export function getDB() {
-  if (connection.isConnected) {
-    return mongo;
-  } else {
-    return false
-  }
+
+// 연결 종료
+export async function closeConnection() {
+  await connection.end();
+  console.log('MariaDB 연결 종료');
 }
