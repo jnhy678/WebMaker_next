@@ -1,7 +1,7 @@
 'use client'
 import SignUpForm, {SignUpFormData} from './body/page';
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
+// import axios from 'axios';
 
 const SignUpPage: React.FC = () => {
   const router = useRouter();

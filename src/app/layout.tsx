@@ -1,9 +1,9 @@
 import './globals.css'
-import { connectDB } from '@utils/connectDB';
+// import { connectDB } from '@utils/connectDB';
 import { Inter } from 'next/font/google'
 import { useEffect } from 'react';
-import dotenv from 'dotenv-safe';
-dotenv.config();
+// import dotenv from 'dotenv-safe';
+// dotenv.config();
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -18,7 +18,7 @@ export default function RootLayout({Component,
   children: React.ReactNode,
   Component: React.Component,
 }) {
-    connectDB();
+    // connectDB();
 
   return (
     <html lang="ko">

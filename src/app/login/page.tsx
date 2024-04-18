@@ -3,31 +3,36 @@ import { useState, useEffect, useRef } from 'react';
 import { Container, Form, Button, ButtonGroup, FormCheck } from 'react-bootstrap';
 import styles from './login.module.css';
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
+import CustomAlert from '../msg/page';
+import { Dialog  } from '@mui/material';
 
 async function getData (id:any ,password:any, e: React.FormEvent<HTMLFormElement>) {
-  new Promise(async (resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     const formData:any = {
       id : id,
       password : password
     };
+    const params = new URLSearchParams(formData).toString();
 
-    await fetch('/api/user/login', {
+    await fetch(`/api/user/login?${params}`, {
       method: 'GET',
       headers: {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer <token>' + process.env.token
-      },
-      // body:JSON.stringify(formData)
+      }
     })
     // axios.get('/api/user/login', await formData)
       .then(async (data) => {
-        console.log('data',data);
-        
-        resolve(await data);
+        let result = await data.json()
+        console.log('data',result.data);
+        if (result.token) {
+          localStorage.setItem('token', result.token);
+        }
+        resolve(await result.data);
       })
       .catch((error) => {
         console.log('error',error)
+        reject(error);
         // 오류 처리 로직 작성
       });
     });
@@ -37,6 +42,17 @@ const LoginPage = () => {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState('');
+
+  const showAlert = (message: string) => {
+    setMessage(message);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   
   
   const $INPUT_ID = useRef<HTMLInputElement>(null);
@@ -64,14 +80,36 @@ const LoginPage = () => {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const loginSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    getData(id, password, e)
+    if (!id) {
+      showAlert("아이디를 입력하세요.")
+      if ($INPUT_ID.current) {
+        $INPUT_ID.current.focus();
+      }
+      return false;
+    }
+    if (!password) {
+      showAlert("비밀번호를 입력하세요.")
+      if ($INPUT_PW.current) {
+        $INPUT_PW.current.focus();
+      }
+      return false;
+    }
+    await getData(id, password, e)
     .then(async (res) => {
-      // alert(await res)
-      // router.push('/main')
-    });
+      let result: any = await res;
+      console.log('result', result);
+      if (result.length > 0) {
+        showAlert('굿')
+      } else {
+        showAlert('아이디없음')
+      }
+    }).catch((err) => {
+      console.log('error', err);
+    })
   };
+
 
   const autoLogin = (e: React.FormEvent<HTMLInputElement>) => {
     const checkValue = e.currentTarget.checked.toString();
@@ -101,7 +139,7 @@ const LoginPage = () => {
     <Container className={styles.container}>
       <div className={styles.loginBox}>
         <h1 className={styles.title}>로그인</h1>
-        <Form className={styles.form} onSubmit={handleSubmit}>
+        <Form className={styles.form} onSubmit={loginSubmit}>
           <Form.Group controlId="id">
             <Form.Control
               ref={$INPUT_ID}
@@ -133,6 +171,7 @@ const LoginPage = () => {
           className={styles.auto} onChange={autoLogin}/>
         </Form>
       </div>
+      <CustomAlert open={open} handleClose={handleClose} message={message} />
       <ButtonGroup aria-label="Basic example" className={styles.subinfo}>
         <Button variant="light" onClick={signup}>회원가입</Button>
         <Button variant="light">Id/Pw찾기</Button>

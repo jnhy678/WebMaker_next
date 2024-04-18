@@ -31,7 +31,7 @@
 // const User = mongoose.models.User || mongoose.model('User', UserSchema)
 // export default User
 
-
+import mysql from 'mysql2'
 import mongoose from 'mongoose';
 import {getDB} from '../connectDB'
 const Schema = mongoose.Schema;
