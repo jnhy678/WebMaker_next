@@ -18,5 +18,5 @@ jobs:
           | sort \
           | tail -n 1 )
           echo "Latest semver tag: $response"
-          latest_tag=$(echo $response | jq -r '.results[0].name')
+          latest_tag="$response"
           echo "✅ Latest dockerhub tag: $latest_tag"
