@@ -8,11 +8,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Get latest DockerHub tag for nginx
+      - name: Get latest DockerHub tag for dockerhub
         run: |
-          echo "Fetching latest tag for nginx..."
+          echo "Fetching latest tag for dockerhub..."
           # response=$(curl -s "https://hub.docker.com/v2/repositories/library/nginx/tags?page_size=1&page=1")
-          response=$(curl -s "https://hub.docker.com/v2/repositories/neosoftbank1/webworkning_front/tags?page_size=1&page=1")
-          echo "Raw response: $response"
+          response=$(curl -s "https://hub.docker.com/v2/repositories/neosoftbank1/webworkning_front/tags?page_size=100" \
+          | jq -r '.results[].name' \
+          | grep -E '^[0-9]{8}-[0-9]{2}$' \
+          | sort \
+          | tail -n 1
+          echo "Latest semver tag: $response"
           latest_tag=$(echo $response | jq -r '.results[0].name')
-          echo "✅ Latest nginx tag: $latest_tag"
+          echo "✅ Latest dockerhub tag: $latest_tag"
