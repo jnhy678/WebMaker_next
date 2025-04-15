@@ -1,0 +1,17 @@
+name: DockerHub Latest Tag Check
+
+on:
+  workflow_dispatch:  # 수동 실행 가능하게
+
+jobs:
+  check-latest-tag:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get latest DockerHub tag for nginx
+        run: |
+          echo "Fetching latest tag for nginx..."
+          response=$(curl -s "https://hub.docker.com/v2/repositories/library/nginx/tags?page_size=1&page=1")
+          echo "Raw response: $response"
+          latest_tag=$(echo $response | jq -r '.results[0].name')
+          echo "✅ Latest nginx tag: $latest_tag"
