@@ -16,7 +16,7 @@ jobs:
           | jq -r '.results[].name' \
           | grep -E '^[0-9]{8}-[0-9]{2}$' \
           | sort \
-          | tail -n 1
+          | tail -n 1 )
           echo "Latest semver tag: $response"
           latest_tag=$(echo $response | jq -r '.results[0].name')
           echo "✅ Latest dockerhub tag: $latest_tag"
